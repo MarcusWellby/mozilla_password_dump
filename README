@@ -1,19 +1,19 @@
-This program dumps firefox password information from your default profile to standard output in a CSV format.
+This program dumps Firefox and Thunderbird password information from your
+default profile to standard output in a CSV format.
 
 It _should_ work on Windows and Unix.
 
-It is a port of http://fz-corp.net/?p=199 (that worked on Linux) and contain some small memory fixes.
+It is a port of http://fz-corp.net/?p=199 (that worked on Linux) and contain
+some small memory fixes.
 
-Tested with Firefox 3.5.5 on Ubuntu 9.04
+Tested with Firefox 3.5.5 on Ubuntu 9.04, Firefox 7.0.1 on Ubuntu 11.10 and
+Thunderbird 7.0.1 on Ubuntu 11.10
 
 Usage:
 -----
 
-$ ff_key3db_dump
-https://signin.ebay.fr,(null),https://signin.ebay.fr,userid,pass,youremail,yourpassword
-....
-
-$ ff_key3db_dump > ff_backup_passwords.csv
+$ mozilla_password_dump -f > firefox_backup_passwords.csv
+$ mozilla_password_dump -t > thunderbird_backup_passwords.csv
 
 Dependencies:
 -----------
@@ -21,12 +21,5 @@ Dependencies:
 * nss
 * nspr
 * ini on Linux
-
-
-Limitations
------------
-* only dumps the default profile
-* a couple of hardcoded stuff...
-* only works with Firefox 3.5. Older Firefox use a different storage mechanisms.
 
 Comments/criticims ;) jerome.lacoste@gmail.com
