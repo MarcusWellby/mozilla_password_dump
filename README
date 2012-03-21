@@ -6,8 +6,8 @@ It _should_ work on Windows and Unix.
 It is a port of http://fz-corp.net/?p=199 (that worked on Linux) and contain
 some small memory fixes.
 
-Tested with Firefox 3.5.5 on Ubuntu 9.04, Firefox 7.0.1 on Ubuntu 11.10 and
-Thunderbird 7.0.1 on Ubuntu 11.10
+Tested with Firefox 3.5.5 on Ubuntu 9.04, Firefox 7.0.1 on Ubuntu 11.10,
+Thunderbird 7.0.1 on Ubuntu 11.10 and Thunderbird 10.0.2
 
 Usage:
 -----
