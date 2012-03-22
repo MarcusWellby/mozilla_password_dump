@@ -184,7 +184,8 @@ static void usage(char **argv)
 			"Options:\n"
 			"       -f  = Dump Firefox passwords\n"
 			"       -t  = Dump Thunderbird passwords\n"
-			"       -c <folder> = Dump passwords from profile present in given folder\n", argv[0]);
+			"       -c <folder> = Dump passwords from profile present in given folder\n"
+			"       -p <password> = Specify master password to use\n", argv[0]);
 }
 
 int main(int argc, char **argv)
@@ -201,14 +202,16 @@ int main(int argc, char **argv)
 	int fflag = 0;
 	int tflag = 0;
 	int cflag = 0;
+	int pflag = 0;
 	char *folder = NULL;
+	char *password = NULL;
 	int c;
 	if(argc < 2) {
 		usage(argv);
 		exit(-1);
 	}
 	opterr = 0;
-	while((c = getopt(argc, argv, "ftc:")) != -1)
+	while((c = getopt(argc, argv, "ftc:p:")) != -1)
 		switch (c)
 		{
 			case 'f':
@@ -221,8 +224,16 @@ int main(int argc, char **argv)
 				cflag = 1;
 				folder = optarg;
 				break;
+			case 'p':
+				pflag = 1;
+				password = optarg;
+				break;
 			case '?':
 				if(optopt == 'c') {
+					fprintf (stderr, "Option -%c requires an argument.\n\n", optopt);
+					usage(argv);
+				}
+				else if(optopt == 'p') {
 					fprintf (stderr, "Option -%c requires an argument.\n\n", optopt);
 					usage(argv);
 				}
@@ -234,6 +245,12 @@ int main(int argc, char **argv)
 			default:
 				abort();
 		}
+
+	if(!fflag && !tflag) {
+		fprintf (stderr, "Option -t or -f is required.\n\n");
+		usage(argv);
+		return 1;
+	}
 
 	if (loadFirefoxLibraries()) {
 		fprintf(stderr, "loadFirefoxLibraries fails\r\n");
@@ -290,10 +307,20 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	if (PK11_CheckUserPassword(keySlot, "") != SECSuccess) {
-		fprintf(stderr, "PK11_CheckUserPassword fails\r\n");
-		fflush(stderr);
-		return 1;
+	if(pflag) {
+		if (PK11_CheckUserPassword(keySlot, password) != SECSuccess) {
+			fprintf(stderr, "PK11_CheckUserPassword fails, re-check or remove supplied master password\r\n");
+			fflush(stderr);
+			return 1;
+		}
+	}
+	else {
+		if (PK11_CheckUserPassword(keySlot, "") != SECSuccess) {
+			/* fprintf(stderr, "PK11_CheckUserPassword fails\r\n"); */
+			fprintf(stderr, "Master password is set. Run with -p <password> option\r\n");
+			fflush(stderr);
+			return 1;
+		}
 	}
 
 	if (PK11_Authenticate(keySlot, TRUE, NULL) != SECSuccess) {
