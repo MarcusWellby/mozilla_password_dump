@@ -246,7 +246,7 @@ int main(int argc, char **argv)
 				abort();
 		}
 
-	if(!fflag && !tflag) {
+	if(!fflag && !tflag && !cflag) {
 		fprintf (stderr, "Option -t or -f is required.\n\n");
 		usage(argv);
 		return 1;
